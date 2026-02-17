@@ -118,51 +118,51 @@ export default function Home() {
             )}
 
             {/* Hero / Search Section */}
-            <section className={"relative px-6 transition-all duration-700 " + (searched ? 'pt-12 pb-10' : 'pt-36 pb-20') + " overflow-hidden print:hidden"}>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-500/10 rounded-full blur-3xl -z-10" />
+            <section className={"relative px-6 transition-all duration-700 " + (searched ? 'pt-8 pb-6' : 'pt-16 pb-12') + " overflow-hidden print:hidden"}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[300px] bg-blue-500/5 rounded-full blur-[120px] -z-10" />
 
-                <div className="max-w-4xl mx-auto text-center space-y-8">
+                <div className="max-w-5xl mx-auto text-center space-y-6">
                     {!searched && (
-                        <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-1000">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-[10px] font-black uppercase tracking-widest mx-auto">
+                        <div className="space-y-2 animate-in fade-in slide-in-from-top-4 duration-1000">
+                            <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-[9px] font-black uppercase tracking-widest mx-auto">
                                 BUSCA PREÇO PRO • COMPLIANCE LEI 14.133/21
                             </div>
 
-                            <h1 className="text-7xl md:text-9xl font-black tracking-tighter text-zinc-900 dark:text-white leading-[0.8]">
-                                BUSCA PREÇO<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">PRO</span>
+                            <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-zinc-900 dark:text-white leading-none">
+                                BUSCA PREÇO <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">PRO</span>
                             </h1>
 
-                            <p className="text-base md:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto font-medium">
+                            <p className="text-xs md:text-sm text-zinc-400 dark:text-zinc-500 max-w-xl mx-auto font-bold uppercase tracking-wide">
                                 Solução em conformidade com a Lei 14.133/21.
                             </p>
                         </div>
                     )}
 
-                    <div className="pt-4">
+                    <div>
                         <SearchBar onSearch={handleSearch} />
                     </div>
                 </div>
             </section>
 
-            {/* Stats Table / Selection Summary */}
-            {(searched && selectedItems.length > 0) && (
-                <section className="px-6 mb-8 max-w-7xl mx-auto animate-in slide-in-from-bottom-2 duration-500 print:hidden">
-                    <div className="bg-white dark:bg-zinc-900 border border-blue-200 dark:border-blue-900 rounded-3xl p-6 shadow-xl shadow-blue-500/5 flex flex-col md:flex-row items-center justify-between gap-8">
-                        <div className="flex items-center gap-6">
-                            <div className="flex flex-col">
-                                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Amostras</span>
-                                <span className="text-2xl font-black text-blue-600">{selectedItems.length}</span>
+            {/* Fixed Summary Bar */}
+            {selectedIds.size > 0 && (
+                <section className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6 z-[100] animate-in slide-in-from-bottom-8 duration-500 print:hidden">
+                    <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-blue-200 dark:border-blue-900 rounded-2xl p-4 shadow-2xl shadow-blue-500/20 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 md:gap-8 overflow-hidden">
+                            <div className="flex flex-col min-w-fit">
+                                <span className="text-[8px] font-black text-zinc-400 uppercase tracking-widest leading-none mb-1">Amostras</span>
+                                <span className="text-lg font-black text-blue-600 leading-none">{selectedItems.length}</span>
                             </div>
-                            <div className="w-px h-10 bg-zinc-200 dark:bg-zinc-800 hidden md:block" />
-                            <div className="flex flex-col">
-                                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest text-emerald-600">Preço Médio</span>
-                                <span className="text-2xl font-black text-emerald-600">
+                            <div className="w-px h-8 bg-zinc-200 dark:bg-zinc-800" />
+                            <div className="flex flex-col min-w-fit">
+                                <span className="text-[8px] font-black text-emerald-600 uppercase tracking-widest leading-none mb-1">Preço Médio</span>
+                                <span className="text-lg font-black text-emerald-600 leading-none">
                                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats.mean)}
                                 </span>
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest text-indigo-600">Mediana</span>
-                                <span className="text-2xl font-black text-indigo-600">
+                            <div className="hidden md:flex flex-col min-w-fit">
+                                <span className="text-[8px] font-black text-indigo-600 uppercase tracking-widest leading-none mb-1">Mediana</span>
+                                <span className="text-lg font-black text-indigo-600 leading-none">
                                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats.median)}
                                 </span>
                             </div>
@@ -170,9 +170,9 @@ export default function Home() {
 
                         <button
                             onClick={handlePrepareReport}
-                            className="w-full md:w-auto px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-tighter rounded-2xl transition-all shadow-lg shadow-blue-600/20 active:scale-95 flex items-center justify-center gap-2"
+                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase text-[10px] tracking-tighter rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2 whitespace-nowrap"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                             </svg>
                             Gerar Relatório PDF
@@ -182,7 +182,7 @@ export default function Home() {
             )}
 
             {/* Results Section */}
-            <section className="px-6 pb-20 max-w-7xl mx-auto min-h-[400px] print:p-0">
+            <section className="px-4 pb-32 w-full min-h-[400px] print:p-0">
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-24 space-y-6 print:hidden">
                         <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />

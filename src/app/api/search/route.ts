@@ -16,37 +16,42 @@ export async function GET(request: Request) {
 
   if (source === 'todos' || source === 'pncp') {
     try {
-      // PNCP API allows some filtering by UF if we use the right endpoint or filter client side
-      // For now, we'll fetch and filter if UF is provided to ensure accuracy
-      const resp = await fetch(`https://pncp.gov.br/api/consulta/v1/contratacoes?pagina=1&tamanhoPagina=20&termo=${encodeURIComponent(q)}`);
+      // PNCP API - Termo de busca e paginação
+      const resp = await fetch(`https://pncp.gov.br/api/consulta/v1/contratacoes?pagina=1&tamanhoPagina=50&termo=${encodeURIComponent(q)}`);
+
       if (resp.ok) {
         const data = await resp.json();
-        let pncpRes = (data.data || []).map((item: any) => ({
+        let pncpItems = data.data || [];
+
+        // Mapeamento consistente dos dados do governo
+        let pncpRes = pncpItems.map((item: any) => ({
           id: `pncp-${item.id || Math.random()}`,
-          title: item.objeto || 'Sem descrição',
-          price: item.valorEstimado || 0,
+          title: item.objeto || 'Descrição não disponível',
+          price: item.valorEstimado || item.valorTotalHomologado || 0,
           store: item.orgaoEntidade?.razaoSocial || 'Órgão Público',
           image: '',
           link: item.linkPortalPublicacao || '#',
           isGovernment: true,
           governmentData: {
-            organ: item.orgaoEntidade?.razaoSocial,
-            bidNumber: item.numeroControlePNCP,
+            organ: item.orgaoEntidade?.razaoSocial || 'Órgão não identificado',
+            bidNumber: item.numeroControlePNCP || '-',
             homologationDate: item.dataPublicacaoPncp ? new Date(item.dataPublicacaoPncp).toLocaleDateString('pt-BR') : '-',
             uf: item.orgaoEntidade?.uf || '-',
-            city: item.orgaoEntidade?.municípioNome || '-'
+            city: item.orgaoEntidade?.municipioNome || '-'
           }
         }));
 
-        // Client-side filtering for UF/City if provided
+        // Filtro de UF aplicado ao PNCP
         if (uf) {
-          pncpRes = pncpRes.filter((item: any) => item.governmentData.uf.toLowerCase() === uf.toLowerCase());
+          pncpRes = pncpRes.filter((item: any) =>
+            item.governmentData.uf.toLowerCase() === uf.toLowerCase()
+          );
         }
 
         results = [...results, ...pncpRes];
       }
     } catch (e) {
-      console.error('PNCP Error:', e);
+      console.error('PNCP API Error:', e);
     }
   }
 
@@ -62,9 +67,9 @@ export async function GET(request: Request) {
       id: `int-sim-${idx}-${Math.random()}`,
       title: `${q} - Oferta Disponível`,
       price: (Math.random() * 2000) + 100,
-      store: s.name,
-      image: "", // Use generic icon
-      link: "https://www.google.com/search?q=" + encodeURIComponent(q),
+      store: uf ? `${s.name} (${uf})` : s.name,
+      image: "",
+      link: "https://www.google.com/search?q=" + encodeURIComponent(q + (uf ? ` em ${uf}` : '')),
       isGovernment: false
     }));
 

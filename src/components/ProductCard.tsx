@@ -67,22 +67,21 @@ export default function ProductCard({ id, title, price, store, image, link, isGo
 
       <div className="p-5 flex flex-col flex-grow">
         {isGovernment && (
-          <div className="mb-2 flex flex-wrap gap-2 text-[8px] font-black uppercase tracking-widest text-zinc-400">
-            <span className="text-blue-600 dark:text-blue-400"># {governmentData?.bidNumber}</span>
-            <span>•</span>
-            <span>{governmentData?.homologationDate}</span>
+          <div className="mb-3 space-y-1">
+            <div className="flex flex-wrap gap-2 text-[8px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">
+              <span># {governmentData?.bidNumber}</span>
+              <span className="text-zinc-300 dark:text-zinc-700">•</span>
+              <span>{governmentData?.homologationDate}</span>
+            </div>
+            <p className="text-[11px] text-zinc-600 dark:text-zinc-300 font-black uppercase leading-tight line-clamp-2">
+              🏛️ {governmentData?.organ}
+            </p>
           </div>
         )}
 
-        <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-100 line-clamp-3 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors uppercase tracking-tight">
+        <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-100 line-clamp-3 mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors uppercase tracking-tight">
           {title}
         </h3>
-
-        {isGovernment && (
-          <p className="text-[10px] text-zinc-400 line-clamp-2 mb-4 italic leading-tight uppercase font-medium">
-            {governmentData?.organ}
-          </p>
-        )}
 
         <div className="mt-auto pt-4 flex items-end justify-between gap-2 border-t border-zinc-100 dark:border-zinc-800">
           <div className="flex flex-col">
