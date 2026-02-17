@@ -1,4 +1,7 @@
-'use client';
+const fs = require('fs');
+const path = require('path');
+const target = path.join(__dirname, '..', 'busca-preco-pro', 'src', 'app', 'page.tsx');
+const content = \`'use client';
 
 import { useState } from 'react';
 import SearchBar from "@/components/SearchBar";
@@ -13,7 +16,7 @@ export default function Home() {
       setLoading(true);
       setSearched(true);
       try {
-          const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&source=${source}`);
+          const res = await fetch(\\\`/api/search?q=\\\${encodeURIComponent(q)}&source=\\\${source}\\\`);
           const data = await res.json();
           setResults(data);
       } catch (error) {
@@ -24,7 +27,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-100/30 dark:bg-black selection:bg-blue-100 selection:text-blue-900">
+    <main className="min-h-screen bg-zinc-50 dark:bg-black selection:bg-blue-100 selection:text-blue-900">
       <section className={"relative px-6 transition-all duration-700 " + (searched ? 'pt-12 pb-10' : 'pt-32 pb-20') + " overflow-hidden"}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-500/10 rounded-full blur-3xl -z-10" />
         
@@ -106,4 +109,7 @@ export default function Home() {
       </footer>
     </main>
   );
-}
+}\`;
+fs.writeFileSync(target, content);
+console.log('page.tsx written');
+\`;

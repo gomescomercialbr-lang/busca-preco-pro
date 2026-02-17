@@ -1,4 +1,19 @@
-import { NextResponse } from 'next/server';
+const fs = require('fs');
+const path = require('path');
+const targetDir = path.join(__dirname, '..', 'busca-preco-pro');
+const writeT = (p, c) => {
+    const fp = path.join(targetDir, p);
+    const d = path.dirname(fp);
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+    fs.writeFileSync(fp, c);
+    console.log(`Wrote ${p}`);
+};
+
+// Supabase
+writeT('src/lib/supabase.ts', "import { createClient } from '@supabase/supabase-js';\n\nconst supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';\nconst supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';\n\nexport const supabase = createClient(supabaseUrl, supabaseAnonKey);");
+
+// API Route
+writeT('src/app/api/search/route.ts', `import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
 export async function GET(request: Request) {
@@ -14,11 +29,11 @@ export async function GET(request: Request) {
 
   if (source === 'todos' || source === 'pncp') {
     try {
-      const resp = await fetch(`https://pncp.gov.br/api/consulta/v1/contratacoes?pagina=1&tamanhoPagina=10&termo=${encodeURIComponent(q)}`);
+      const resp = await fetch(\`https://pncp.gov.br/api/consulta/v1/contratacoes?pagina=1&tamanhoPagina=10&termo=\${encodeURIComponent(q)}\`);
       if (resp.ok) {
         const data = await resp.json();
         const pncpRes = (data.data || []).map((item: any) => ({
-          id: `pncp-${item.id || Math.random()}`,
+          id: \`pncp-\${item.id || Math.random()}\`,
           title: item.objeto || 'Sem descrição',
           price: item.valorEstimado || 0,
           store: item.orgaoEntidade?.razaoSocial || 'Órgão Público',
@@ -52,3 +67,4 @@ export async function GET(request: Request) {
 
   return NextResponse.json(results);
 }
+`);

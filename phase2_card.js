@@ -1,4 +1,7 @@
-import Image from 'next/image';
+const fs = require('fs');
+const path = require('path');
+const target = path.join(__dirname, '..', 'busca-preco-pro', 'src', 'components', 'ProductCard.tsx');
+const content = \`import Image from 'next/image';
 
 interface ProductCardProps {
   title: string;
@@ -43,27 +46,27 @@ export default function ProductCard({ title, price, store, image, link, isGovern
       
       <div className="p-5 flex flex-col flex-grow">
         {isGovernment && (
-            <div className="mb-2 flex flex-wrap gap-2 text-[9px] font-bold uppercase tracking-widest text-zinc-400 font-black">
+            <div className="mb-2 flex flex-wrap gap-2 text-[9px] font-bold uppercase tracking-widest">
                 <span className="text-blue-600 dark:text-blue-400">PNCP</span>
-                <span>•</span>
-                <span>DATA: {governmentData?.homologationDate}</span>
+                <span className="text-zinc-400">•</span>
+                <span className="text-zinc-500">HOMOL: {governmentData?.homologationDate}</span>
             </div>
         )}
         
-        <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-100 line-clamp-3 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors uppercase tracking-tight">
+        <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-100 line-clamp-3 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           {title}
         </h3>
         
         {isGovernment && (
-            <p className="text-[10px] text-zinc-400 line-clamp-2 mb-4 italic leading-tight uppercase font-medium">
+            <p className="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-4 italic leading-tight">
                 {governmentData?.organ}
             </p>
         )}
         
-        <div className="mt-auto pt-4 flex items-end justify-between gap-2 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="mt-auto pt-4 flex items-end justify-between gap-2 border-t border-zinc-50 dark:border-zinc-800">
           <div className="flex flex-col">
-            <span className="text-[8px] text-zinc-400 font-black uppercase tracking-widest">{isGovernment ? 'VALOR HOMOLOGADO' : 'À VISTA'}</span>
-            <span className={"text-lg font-black " + (isGovernment ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400')}>
+            <span className="text-[9px] text-zinc-400 font-bold uppercase">{isGovernment ? 'Valor Homologado' : 'À vista'}</span>
+            <span className={"text-xl font-black " + (isGovernment ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400')}>
               {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price)}
             </span>
           </div>
@@ -72,12 +75,15 @@ export default function ProductCard({ title, price, store, image, link, isGovern
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className={"px-3 py-2 " + (isGovernment ? 'bg-blue-600 hover:bg-blue-700' : 'bg-zinc-900 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200') + " text-white " + (isGovernment ? 'text-white' : 'dark:text-black') + " text-[9px] font-black uppercase rounded-lg transition-all shadow-sm active:scale-95"}
+            className={"px-3 py-2 " + (isGovernment ? 'bg-blue-600 hover:bg-blue-700' : 'bg-zinc-900 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200') + " text-white " + (isGovernment ? 'text-white' : 'dark:text-black') + " text-[10px] font-black uppercase rounded-lg transition-all shadow-sm active:scale-95"}
           >
-            {isGovernment ? 'VER EDITAL' : 'IR PARA LOJA'}
+            {isGovernment ? 'Ver Edital' : 'Ir para Loja'}
           </a>
         </div>
       </div>
     </div>
   );
-}
+}\`;
+fs.writeFileSync(target, content);
+console.log('ProductCard.tsx written');
+\`;

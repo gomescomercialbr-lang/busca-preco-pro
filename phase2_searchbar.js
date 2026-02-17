@@ -1,4 +1,7 @@
-import { useState } from 'react';
+const fs = require('fs');
+const path = require('path');
+const target = path.join(__dirname, '..', 'busca-preco-pro', 'src', 'components', 'SearchBar.tsx');
+const content = \`import { useState } from 'react';
 
 interface SearchBarProps {
     onSearch?: (q: string, source: string) => void;
@@ -63,4 +66,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       </div>
     </div>
   );
-}
+}\`;
+fs.writeFileSync(target, content);
+console.log('SearchBar.tsx written');
+\`;
