@@ -194,7 +194,7 @@ export default function Home() {
                             <h2 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Resultados Encontrados: {results.length}</h2>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 print:block">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 print:hidden">
                             {results.map((product) => (
                                 <div key={product.id} className="print:mb-12 print:break-inside-avoid">
                                     <ProductCard
@@ -212,6 +212,34 @@ export default function Home() {
                         <button onClick={() => setSearched(false)} className="mt-4 text-blue-600 font-bold uppercase text-[10px] tracking-widest hover:underline">Zerar Busca</button>
                     </div>
                 ) : null}
+
+                {/* Print-only Item List (Mapa de Preços) */}
+                <div className="hidden print:block mt-8 border-t border-zinc-200 pt-8">
+                    <h2 className="text-xl font-black uppercase mb-6">Detalhamento das Amostras</h2>
+                    <div className="space-y-8">
+                        {selectedItems.map((item, idx) => (
+                            <div key={item.id} className="border-b border-zinc-100 pb-6 break-inside-avoid">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex-1">
+                                        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Amostra #0{idx + 1}</p>
+                                        <h3 className="text-sm font-bold uppercase leading-tight mb-2">{item.title}</h3>
+                                        <p className="text-[9px] font-bold text-zinc-500 uppercase tracking-tighter">Fonte: {item.store}</p>
+
+                                        {item.isGovernment && (
+                                            <p className="mt-2 text-[9px] bg-zinc-50 p-2 border-l-2 border-blue-600 font-bold text-zinc-600 uppercase">
+                                                Órgão: {item.governmentData.organ} | Processo: {item.governmentData.bidNumber} | Data: {item.governmentData.homologationDate}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Valor Unitário</p>
+                                        <p className="text-lg font-black">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </section>
 
             {/* Hidden Print Header (Lei 14.133 Compliance) */}
@@ -246,13 +274,13 @@ export default function Home() {
                         <span className="text-4xl font-black">{selectedItems.length}</span>
                     </div>
                     <div className="flex flex-col items-center border-r border-zinc-200">
-                        <span className="text-[10px] font-black uppercase text-zinc-400 text-blue-600">Preço Médio</span>
+                        <span className="text-[10px] font-black uppercase text-zinc-400 text-blue-600">Valor de Referência (Média)</span>
                         <span className="text-4xl font-black text-blue-600">
                             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats.mean)}
                         </span>
                     </div>
                     <div className="flex flex-col items-center">
-                        <span className="text-[10px] font-black uppercase text-zinc-400 text-indigo-600">Mediana Est.</span>
+                        <span className="text-[10px] font-black uppercase text-zinc-400 text-indigo-600">Valor de Referência (Mediana)</span>
                         <span className="text-4xl font-black text-indigo-600">
                             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats.median)}
                         </span>

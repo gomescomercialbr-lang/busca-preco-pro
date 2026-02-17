@@ -34,7 +34,7 @@ export async function GET(request: Request) {
           isGovernment: true,
           governmentData: {
             organ: item.orgaoEntidade?.razaoSocial || 'Órgão não identificado',
-            bidNumber: item.numeroControlePNCP || '-',
+            bidNumber: item.numeroControlePNCP || item.sequencialContratacao || '-',
             homologationDate: item.dataPublicacaoPncp ? new Date(item.dataPublicacaoPncp).toLocaleDateString('pt-BR') : '-',
             uf: item.orgaoEntidade?.uf || '-',
             city: item.orgaoEntidade?.municipioNome || '-'

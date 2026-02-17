@@ -76,6 +76,14 @@ export default function ProductCard({ id, title, price, store, image, link, isGo
             <p className="text-[11px] text-zinc-600 dark:text-zinc-300 font-black uppercase leading-tight line-clamp-2">
               🏛️ {governmentData?.organ}
             </p>
+            <div className="flex flex-col gap-0.5 mt-1 text-[9px] font-bold text-zinc-500 uppercase">
+              <span className="flex items-center gap-1">
+                <span className="text-[8px] opacity-60">Processo:</span> {governmentData?.bidNumber}
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="text-[8px] opacity-60">Homologação:</span> {governmentData?.homologationDate}
+              </span>
+            </div>
           </div>
         )}
 
