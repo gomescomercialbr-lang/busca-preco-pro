@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const municipio = searchParams.get('municipio') || '';
 
   if (q) {
-      supabase.from('search_history').insert([{ query: q, source: source }]).then();
+    supabase.from('search_history').insert([{ query: q, source: source }]).then();
   }
 
   let results: any[] = [];
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
           title: item.objeto || 'Sem descrição',
           price: item.valorEstimado || 0,
           store: item.orgaoEntidade?.razaoSocial || 'Órgão Público',
-          image: '', 
+          image: '',
           link: item.linkPortalPublicacao || '#',
           isGovernment: true,
           governmentData: {
@@ -40,9 +40,9 @@ export async function GET(request: Request) {
 
         // Client-side filtering for UF/City if provided
         if (uf) {
-            pncpRes = pncpRes.filter((item: any) => item.governmentData.uf.toLowerCase() === uf.toLowerCase());
+          pncpRes = pncpRes.filter((item: any) => item.governmentData.uf.toLowerCase() === uf.toLowerCase());
         }
-        
+
         results = [...results, ...pncpRes];
       }
     } catch (e) {
@@ -51,15 +51,24 @@ export async function GET(request: Request) {
   }
 
   if (source === 'todos' || source === 'internet') {
-      results = [...results, {
-          id: 'int-demo-' + Math.random(),
-          title: q + ' - Exemplo Internet',
-          price: 1500.00 + (Math.random() * 500),
-          store: "Amazon",
-          image: "https://m.media-amazon.com/images/I/81c50PU+lpL._AC_SX679_.jpg", 
-          link: "#",
-          isGovernment: false
-      }];
+    const stores = [
+      { name: "Mercado Livre" },
+      { name: "Amazon Brasil" },
+      { name: "Magazine Luiza" },
+      { name: "Casas Bahia" }
+    ];
+
+    const internetRes = stores.map((s, idx) => ({
+      id: `int-sim-${idx}-${Math.random()}`,
+      title: `${q} - Oferta Disponível`,
+      price: (Math.random() * 2000) + 100,
+      store: s.name,
+      image: "", // Use generic icon
+      link: "https://www.google.com/search?q=" + encodeURIComponent(q),
+      isGovernment: false
+    }));
+
+    results = [...results, ...internetRes];
   }
 
   return NextResponse.json(results);
